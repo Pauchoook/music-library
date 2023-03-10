@@ -1,0 +1,18 @@
+.app {
+  overflow: hidden;
+  &.left {
+    .sidebar {
+      transform: translateX(0);
+    }
+  }
+  &__wrapper {
+    display: flex;
+    width: calc(100% + 200px);
+    // min-height: 100vh;
+    transform: translateX(-200px);
+    transition: transform .2s ease;
+    &.left-open {
+      transform: translateX(0);
+    }
+  }
+}

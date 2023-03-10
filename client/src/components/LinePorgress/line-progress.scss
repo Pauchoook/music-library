@@ -1,0 +1,31 @@
+.line-progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__input {
+    -webkit-appearance: none;
+    height: 3px;
+    width: 100%;
+    background-color: var(--mine-shaft-light);
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      background-color: var(--white);
+      border-radius: 50%;
+    }
+  }
+  &__bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    border-radius: 10px;
+    background-color: var(--white);
+  }
+}

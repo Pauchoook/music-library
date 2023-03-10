@@ -1,0 +1,19 @@
+.dropdown {
+  position: relative;
+  &.open {
+    .dropdown__item {
+      visibility: visible;
+      z-index: 10;
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  &__item {
+    margin: 0;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: visibility .4s ease, opacity .4s ease, transform .4s ease;
+  }
+}
