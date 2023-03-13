@@ -6,8 +6,9 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { FileService, FileType } from 'src/files/file.service';
+import { User } from 'src/user/schemas/user.schema';
 
-interface ITokenUser {
+export interface ITokenUser {
   _id?: Object,
   email: string,
   firstName?: string,
@@ -18,6 +19,10 @@ interface ITokenUser {
   avatar: string,
 }
 
+export interface ITokenRes {
+  token: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,7 +31,7 @@ export class AuthService {
     private fileService: FileService,
   ) {}
 
-  async registration(dto: CreateUserDto, avatar: Express.Multer.File | undefined) {
+  async registration(dto: CreateUserDto, avatar: Express.Multer.File | undefined): Promise<ITokenRes> {
     const candidateEmail = await this.userService.getUserEmail(dto.email);
     const candidateUsername = await this.userService.getUserUsername(
       dto.username,
@@ -53,18 +58,19 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<ITokenRes> {
     const user = await this.validateUser(email, password);
     return this.generateToken(user);
   }
 
-  async check(user: ITokenUser) {
-    console.log(user)
+  async check(user: ITokenUser): Promise<ITokenRes> {
     const token = this.generateToken(user);
     return token;
   }
 
-  async generateToken(user: ITokenUser){
+  async generateToken(user: ITokenUser): Promise<ITokenRes> {
+    const dbUser = await this.userService.getUserId(user._id);
+
     const payload = {
       _id: user._id,
       email: user.email,
@@ -73,7 +79,7 @@ export class AuthService {
       username: user.username,
       dateBirth: user.dateBirth,
       gender: user.gender,
-      avatar: user.avatar,
+      avatar: dbUser.avatar,
     }
     return {token: this.jwtService.sign(payload)}
   }

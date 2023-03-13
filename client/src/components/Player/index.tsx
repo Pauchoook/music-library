@@ -4,36 +4,21 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { playerSlice } from '../../store/reducers/player/PlayerSlice';
 import LineProgress from '../LinePorgress';
 import './player.scss';
+import TrackProgress from './TrackProgress';
 
 const audio = new Audio();
 
 const Player: React.FC = () => {
-  const currentTrack = {
-    name: 'United in Grif',
-    listens: 0,
-    picture: 'image/b5646943-6cce-4976-9069-ecdc1f026f5d.jpg',
-    audio: 'audio/44b5c451-02c6-4cc3-b0af-927de68134fe.mp3',
-    executor: 'Mac DeMarco',
-    createdAt: '2023-03-08T16:26:04.301Z',
-    comments: [],
-    _id: '6408b7602d3f1524c6f47710',
-  };
   const dispatch = useAppDispatch();
   const { pause, volume, active, duration, currentTime } = useAppSelector((state) => state.player);
   const { playTrack, pauseTrack, setCurrentTime, setDuration, setVolume } = playerSlice.actions;
   const [repeat, setRepeat] = useState<boolean>(false);
-  const currentMinutes =
-    Math.floor(currentTime / 60) < 10 ? `0${Math.floor(currentTime / 60)}` : Math.floor(currentTime / 60);
-  const currentSeconds =
-    Math.floor(currentTime % 60) < 10 ? `0${Math.floor(currentTime % 60)}` : Math.floor(currentTime % 60);
-  const allMinutes =
-    Math.floor(duration / 60) < 10 ? `0${Math.floor(duration / 60)}` : Math.floor(duration / 60);
-  const allSeconds =
-    Math.floor(duration % 60) < 10 ? `0${Math.floor(duration % 60)}` : Math.floor(duration % 60);
 
   useEffect(() => {
-    audio.src = process.env.REACT_APP_API_URL + '/' + currentTrack.audio;
+    audio.src = process.env.REACT_APP_API_URL + '/' + active?.audio;
     audio.volume = volume / 100;
+    audio.play()
+    dispatch(playTrack());
     audio.onloadedmetadata = () => {
       dispatch(setDuration(audio.duration));
     };
@@ -75,6 +60,10 @@ const Player: React.FC = () => {
 
   const hanlderRepeat = () => {
     setRepeat(!repeat);
+  }
+
+  if (!active) {
+    return null;
   }
 
   return (
@@ -199,13 +188,7 @@ const Player: React.FC = () => {
           </defs>
         </svg>
       </button>
-      <span className="player__value">
-        {currentMinutes}:{currentSeconds}
-      </span>
-      <LineProgress width={500} left={currentTime} right={duration} onChange={changeCurrentTime} />
-      <span className="player__value player__value--right">
-        {allMinutes}:{allSeconds}
-      </span>
+      <TrackProgress audio={audio} />
       <button className="player__sound">
         <svg className="player__icon-sound" viewBox="0 0 20 23" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.240387 11.3522C0.240387 12.4699 0.665066 13.4359 1.51443 14.2502C2.36378 15.0645 3.38141 15.4716 4.56731 15.4716H6.63462C7.08334 15.4716 7.41987 15.6313 7.64423 15.9506L9.71154 19.112C10.2885 20.07 11.2019 20.549 12.4519 20.549H14.5192C15.0962 20.549 15.601 20.3494 16.0337 19.9503C16.4663 19.5511 16.6827 19.0801 16.6827 18.5372V2.15549C16.6827 1.61263 16.4744 1.14161 16.0577 0.742447C15.641 0.343282 15.1282 0.1437 14.5192 0.1437H12.4519C11.2019 0.1437 10.2885 0.622697 9.71154 1.58069L7.64423 4.74208C7.41987 5.06141 7.08334 5.22108 6.63462 5.22108H4.56731C3.38141 5.22108 2.36378 5.62822 1.51443 6.44252C0.665066 7.25682 0.240387 8.2228 0.240387 9.34046V11.3522ZM2.30769 9.34046C2.30769 8.76566 2.52404 8.27868 2.95673 7.87951C3.38943 7.48035 3.92628 7.28077 4.56731 7.28077H6.63462C7.78846 7.28077 8.70193 6.80177 9.375 5.84377L11.4423 2.68239C11.6667 2.33112 12.0032 2.15549 12.4519 2.15549H14.6154V18.5372H12.4519C12.0032 18.5372 11.6667 18.3616 11.4423 18.0103L9.375 14.8489C8.86218 13.8909 7.94872 13.4119 6.63462 13.4119H4.56731C3.92628 13.4119 3.38943 13.2124 2.95673 12.8132C2.52404 12.414 2.30769 11.927 2.30769 11.3522V9.34046ZM17.6923 7.28077V13.4119C17.6923 14.0825 18.0288 14.4178 18.7019 14.4178C19.4071 14.4178 19.7596 14.0825 19.7596 13.4119V7.28077C19.7596 6.61017 19.4071 6.27487 18.7019 6.27487C18.0288 6.27487 17.6923 6.61017 17.6923 7.28077Z" />

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { registration } from '../../store/reducers/user/ActionCreators';
-import DropdownMonth from './DrodownMonth';
-import DropdownDays from './DropdownDays';
-import DropdownYears from './DropdownYears';
+import DropdownMonth from '../Dropdowns/Form/DrodownMonth';
+import DropdownDays from '../Dropdowns/Form/DropdownDays';
+import DropdownYears from '../Dropdowns/Form/DropdownYears';
 
-type FormValuesRegistration = {
+interface FormValuesRegistration {
   email: string;
   password: string;
   username: string;
@@ -14,12 +14,27 @@ type FormValuesRegistration = {
   date: string;
 };
 
+const months = [
+  { id: 1, name: 'Январь' },
+  { id: 2, name: 'Февраль' },
+  { id: 3, name: 'Март' },
+  { id: 4, name: 'Апрель' },
+  { id: 5, name: 'Май' },
+  { id: 6, name: 'Июнь' },
+  { id: 7, name: 'Июль' },
+  { id: 8, name: 'Август' },
+  { id: 9, name: 'Сентябрь' },
+  { id: 10, name: 'Октябрь' },
+  { id: 11, name: 'Ноябрь' },
+  { id: 12, name: 'Декабрь' },
+];
+
 interface RegistrationFormProps {
   openLogin: () => void;
   hide: () => void;
 }
 
-export interface ICurrentMonth {
+interface ICurrentMonth {
   id: number;
   name: string;
 }
@@ -109,7 +124,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ openLogin, hide }) 
       <div className="form__item">
         <span className="form__date-title">Date of birth</span>
         <div className="form__date-wrapper">
-          <DropdownMonth currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} />
+          <DropdownMonth months={months} currentMonth={currentMonth} setCurrentMonth={setCurrentMonth} />
           <DropdownDays currentDay={currentDay} setCurrentDay={setCurrentDay} />
           <DropdownYears currentYear={currentYear} setCurrentYear={setCurrentYear} />
         </div>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const NavList: React.FC = () => {
-  const [activeItem, setActiveItem] = useState(0);
+  const location = useLocation();
   const navList = [
     {
       path: '/',
@@ -42,14 +42,17 @@ const NavList: React.FC = () => {
   return (
     <nav className="sidebar__nav">
       <ul className="sidebar__nav-list">
-        {navList.map((item, index) =>
-        <li key={item.path} className="sidebar__nav-item">
-          <Link onClick={() => setActiveItem(index)} to={item.path} className={index === activeItem ? "sidebar__nav-btn active" : "sidebar__nav-btn"}>
-            {item.svg}
-            <span>{item.content}</span>
-          </Link>
-        </li>
-        )}
+        {navList.map((item) => (
+          <li key={item.path} className="sidebar__nav-item">
+            <Link
+              to={item.path}
+              className={item.path === location.pathname ? 'sidebar__nav-btn active' : 'sidebar__nav-btn'}
+            >
+              {item.svg}
+              <span>{item.content}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import arrows from '../../assets/img/arrow-up-down.svg';
+import arrows from '../../../assets/img/arrow-up-down.svg';
 
 interface DropdownDaysProps {
   currentDay: number;

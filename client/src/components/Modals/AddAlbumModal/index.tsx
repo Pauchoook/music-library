@@ -1,23 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppSelector } from '../../../hooks/redux';
 import { AlbumApi } from '../../../store/services/AlbumService';
+import { FormValuesAlbum } from '../../../types/album';
+import { ModalProps } from '../../../types/modal';
 
-interface AddAlbumModalProps {
-  hideModal: () => void;
-}
-
-interface FormValuesAlbum {
-  name: string;
-  executor: string;
-  picture: File[];
-}
-
-const AddAlbumModal: React.FC<AddAlbumModalProps> = ({ hideModal }) => {
+const AddAlbumModal: React.FC<ModalProps> = ({ hideModal }) => {
   const { user } = useAppSelector((state) => state.user);
   const [isPicture, setIsPicture] = useState<boolean>(false);
-  const [createAlbum, { }] = AlbumApi.useCreateAlbumMutation();
-  const fileRef = useRef<any>(null);
+  const [createAlbum, {error, isSuccess}] = AlbumApi.useCreateAlbumMutation();
+  const fileRef = useRef<HTMLImageElement>(null);
   const {
     register,
     handleSubmit,
@@ -32,23 +24,27 @@ const AddAlbumModal: React.FC<AddAlbumModalProps> = ({ hideModal }) => {
     formData.append('picture', data.picture[0]);
     formData.append('owner', user!._id);
 
-    console.log(user!._id)
-
     createAlbum(formData);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      hideModal();
+    }
+  }, [isSuccess]);
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     const file = e.target.files![0];
 
     reader.onload = function () {
-      fileRef.current.src = reader.result;
+      if (typeof reader.result === 'string' && fileRef.current) {
+        fileRef.current.src = reader.result;
+      }
     };
 
     setIsPicture(true);
     reader.readAsDataURL(file);
-
-    console.log(file)
   };
 
   return (
@@ -70,7 +66,7 @@ const AddAlbumModal: React.FC<AddAlbumModalProps> = ({ hideModal }) => {
         <h3 className="modal__title">Add a playlist</h3>
         <p className="modal__content">Music for everyone</p>
         <form onSubmit={handleSubmit(onSubmit)} action="#" className="form">
-          {/* <span className='form__global-error'>{error && error}</span> */}
+          <span className="form__global-error">{error && 'Произошла непредвиденная ошибка'}</span>
           <div className="form__item">
             <label htmlFor="name" className="form__label">
               {errors?.name?.message}
@@ -103,7 +99,7 @@ const AddAlbumModal: React.FC<AddAlbumModalProps> = ({ hideModal }) => {
             <div className="form__preview-file">{isPicture && <img ref={fileRef} className="form__img-file" />}</div>
             <input
               {...register('picture', {
-                onChange: onChangeFile
+                onChange: onChangeFile,
               })}
               type="file"
               id="picture"
@@ -111,7 +107,7 @@ const AddAlbumModal: React.FC<AddAlbumModalProps> = ({ hideModal }) => {
               className="form__input-file"
             />
             <label htmlFor="picture" className="form__btn-file">
-              Выбрать файл
+              Выбрать изображение
             </label>
           </div>
           <button type="submit" className="form__btn">

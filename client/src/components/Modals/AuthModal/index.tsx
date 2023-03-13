@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
+import { ModalProps } from '../../../types/modal';
 import LoginForm from '../../AuthForm/LoginForm';
 import RegistrationForm from '../../AuthForm/RegistrationForm';
 
-interface AuthModalProps {
-  hideModal: () => void;
-}
-
-const AuthModal: React.FC<AuthModalProps> = ({ hideModal }) => {
+const AuthModal: React.FC<ModalProps> = ({ hideModal }) => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [isRegistration, setIsRegistration] = useState<boolean>(false);
 
@@ -21,7 +18,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ hideModal }) => {
   };
 
   return (
-    <div onClick={hideModal} className="modal">
+    <div onClick={hideModal} className="modal modal-wrapper">
       <div onClick={(e) => e.stopPropagation()} className="modal__window">
         <button onClick={hideModal} className="modal__close">
           <svg
@@ -36,7 +33,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ hideModal }) => {
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
-        <h3 className="modal__title">Music Player</h3>
+        <h3 className="modal__title">Authorization</h3>
         <p className="modal__content">Music for everyone</p>
         {isLogin && <LoginForm openRegistration={handlerOpenRegistration} hide={hideModal} />}
         {isRegistration && <RegistrationForm openLogin={handlerOpenLogin} hide={hideModal} />}

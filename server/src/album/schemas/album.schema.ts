@@ -23,10 +23,10 @@ export class Album {
   picture: string;
 
   @Prop({default: mongoose.now()})
-  createdAt: Date;
+  createdAt: mongoose.Schema.Types.Date;
 
   @Prop({default: mongoose.now()})
-  updatedAt: Date;
+  updatedAt: mongoose.Schema.Types.Date;
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User'})
   owner: mongoose.Schema.Types.ObjectId;

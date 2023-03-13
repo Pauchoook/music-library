@@ -11,3 +11,10 @@ export interface ITrack {
   user: IUser;
   comments: any[];
 }
+
+export interface FormValuesTrack {
+  name: string;
+  picture: string;
+  audio: string;
+  executor: string;
+}

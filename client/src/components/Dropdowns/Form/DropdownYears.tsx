@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import arrows from '../../assets/img/arrow-up-down.svg';
+import arrows from '../../../assets/img/arrow-up-down.svg';
 
 interface DropdownYearsProps {
   currentYear: number;

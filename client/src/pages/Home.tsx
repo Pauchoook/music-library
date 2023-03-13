@@ -5,14 +5,14 @@ import NewAlbums from '../components/NewAlbums';
 import { AlbumApi } from '../store/services/AlbumService';
 
 const Home: React.FC = () => {
-  const {data: albums, isLoading: isLoadingAlbums} = AlbumApi.useGetAlbumsQuery('');
+  const { data: albums, isLoading: isLoadingAlbums } = AlbumApi.useGetAlbumsQuery({ limit: 20, dateSort: 'asc' });
 
   return (
-    <div className='container'>
+    <div className="container">
       <Navbar />
-      <AlbumSlider albums={albums || []} isLoading={isLoadingAlbums} title='Recently Played' />
+      <AlbumSlider albums={albums || []} isLoading={isLoadingAlbums} title="Recently Played" />
       <NewAlbums />
-      <AlbumSlider albums={albums || []} isLoading={isLoadingAlbums} title='Just for you' />
+      <AlbumSlider albums={albums || []} isLoading={isLoadingAlbums} title="Just for you" />
     </div>
   );
 };

@@ -32,8 +32,8 @@ export class AlbumController {
   }
 
   @Get()
-  getAll(@Query('owner_id') owner: ObjectId) {
-    return this.albumService.getAll(owner);
+  getAll(@Query('owner_id') owner_id: ObjectId, @Query('limit') limit: number, @Query('dateSort') dateSort: string) {
+    return this.albumService.getAll(owner_id, limit, dateSort);
   }
 
   @Get(':id')
@@ -43,7 +43,6 @@ export class AlbumController {
 
   @Delete(':id') 
   delete(@Param('id') id: ObjectId) {
-    console.log('ff')
     return this.albumService.delete(id);
   }
 

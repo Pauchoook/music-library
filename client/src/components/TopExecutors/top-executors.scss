@@ -1,0 +1,40 @@
+.top-executors {
+  margin-bottom: 20px;
+  &__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    margin: 0px 0px 10px 0px;
+  }
+  &__content {
+    display: block;
+    font-size: 15px;
+    line-height: 18px;
+    opacity: 0.8;
+    margin-bottom: 20px;
+  }
+  &__slider {
+    overflow: visible !important;
+  }
+  &__slide {
+    flex: 0 0 150px;
+  }
+  &__img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  &__name {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    margin: 0px 0px 5px 0px;
+  }
+  &__role {
+    font-size: 15px;
+    line-height: 18px;
+    opacity: 0.8;
+  }
+}

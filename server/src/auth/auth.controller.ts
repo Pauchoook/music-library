@@ -2,7 +2,12 @@ import { Body, Controller, Post, Get, Req } from '@nestjs/common';
 import { UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { User } from 'src/user/schemas/user.schema';
 import { AuthService } from './auth.service';
+
+interface IReq extends Request {
+  user: User
+}
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +30,7 @@ export class AuthController {
   }
 
   @Get('/check')
-  check(@Req() req: any) {
+  check(@Req() req: IReq) {
     const user = req.user;
     return this.authService.check(user);
   }

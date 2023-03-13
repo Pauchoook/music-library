@@ -1,20 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { FileService } from 'src/files/file.service';
+import { JwtService } from '@nestjs/jwt/dist';
+import { FileService, FileType } from 'src/files/file.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { ITokenRes, ITokenUser } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private fileService: FileService,
+    private jwtService: JwtService,
   ) {}
 
   async createUser(dto: CreateUserDto, avatar: string) {
     const user = await this.userModel.create({
-      ...dto, avatar
+      ...dto,
+      avatar,
     });
     return user;
   }
@@ -24,7 +29,7 @@ export class UserService {
       const users = await this.userModel.find();
       return users;
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -33,7 +38,7 @@ export class UserService {
       const user = await this.userModel.findById(id).populate('myTracks');
       return user;
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -44,7 +49,34 @@ export class UserService {
       });
       return user;
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async update(id: ObjectId, userDto: UpdateUserDto): Promise<any> {
+    try {
+      const user = await this.userModel.findByIdAndUpdate(id, userDto).setOptions({new: true});
+
+      return await this.generateToken(user);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async changeAvatar(
+    id: ObjectId,
+    avatar: Express.Multer.File,
+  ): Promise<string> {
+    try {
+      const user = await this.userModel.findById(id);
+      const avatarPath = this.fileService.createFile(FileType.IMAGE, avatar);
+
+      user.avatar = avatarPath;
+      await user.save();
+
+      return user.avatar;
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -55,7 +87,7 @@ export class UserService {
 
       return user.id;
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -67,5 +99,26 @@ export class UserService {
   async getUserUsername(username: string): Promise<User> {
     const user = await this.userModel.findOne({ username });
     return user;
+  }
+
+  async getUserId(id: any): Promise<User> {
+    const user = await this.userModel.findById(id);
+    return user;
+  }
+
+  async generateToken(user: ITokenUser): Promise<ITokenRes> {
+    const dbUser = await this.getUserId(user._id);
+
+    const payload = {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      dateBirth: user.dateBirth,
+      gender: user.gender,
+      avatar: dbUser.avatar,
+    };
+    return { token: this.jwtService.sign(payload) };
   }
 }

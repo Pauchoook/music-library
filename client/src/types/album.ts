@@ -14,9 +14,15 @@ export interface IAlbum {
   tracks: ITrack[];
 }
 
-export interface ICreateTrack {
+export interface ICreateAlbum {
   name: string;
   executor: string;
   owner: string;
-  picture: File
+  picture: string;
+}
+
+export interface FormValuesAlbum {
+  name: string;
+  executor: string;
+  picture: string;
 }

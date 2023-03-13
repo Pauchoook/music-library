@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import { BrowserRouter } from 'react-router-dom';
-import AppRouter from './components/AppRouter';
 import { useAppDispatch } from './hooks/redux';
 import { check } from './store/reducers/user/ActionCreators';
 import Player from './components/Player';
 import './app.scss';
+import AppWrapper from './components/AppWrapper';
 
 function App() {
   const [isLeft, setIsLeft] = useState<boolean>(false);
@@ -15,19 +15,19 @@ function App() {
     dispatch(check());
   }, []);
 
-  const handlerLeft = () => {
+  const handlerLeft = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // чтобы меню не закрывалось по клику на кнопку
     setIsLeft(!isLeft);
-  }
+  };
 
   return (
-    <div className={isLeft ? "app left" : "app"}>
+    <div className={isLeft ? 'app left' : 'app'}>
       <BrowserRouter>
-        <Sidebar isOpen={isLeft} toggleMenu={handlerLeft} />
-        <div className={isLeft ? "app__wrapper left-open" : "app__wrapper"}>
-          <AppRouter />
-        </div>
+        {/* position sticky и fixed не работает из-за transform на родителе */}
+        <Sidebar close={() => setIsLeft(false)} />
+        <AppWrapper isLeft={isLeft} handlerLeft={handlerLeft} />
       </BrowserRouter>
-      {/* <Player /> */}
+      <Player />
     </div>
   );
 }

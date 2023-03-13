@@ -32,7 +32,7 @@ export class Track {
   comments: mongoose.Schema.Types.ObjectId[];
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User'})
-  user: User;
+  owner: User;
 }
 
 export const TrackSchema = SchemaFactory.createForClass(Track);

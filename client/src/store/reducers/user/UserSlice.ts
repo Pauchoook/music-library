@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser, UserState } from '../../../types/user';
-import { check, login, registration } from './ActionCreators';
+import { changeAvatar, check, editUser, login, registration } from './ActionCreators';
 
 const initialState: UserState = {
   user: null,
   isAuth: false,
   error: '',
+  isLoading: false
 };
 
 export const userSlice = createSlice({
@@ -39,7 +40,31 @@ export const userSlice = createSlice({
       .addCase(check.fulfilled.type, (state, action: PayloadAction<IUser>) => {
         state.user = action.payload;
         state.isAuth = true;
-      });
+      })
+      .addCase(changeAvatar.fulfilled.type, (state, action: PayloadAction<string>) => {
+        state.user!.avatar = action.payload;
+        state.error = '';
+        state.isLoading = false;
+      })
+      .addCase(changeAvatar.pending.type, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changeAvatar.rejected.type, (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(editUser.fulfilled.type, (state, action: PayloadAction<IUser>) => {
+        state.user= action.payload;
+        state.error = '';
+        state.isLoading = false;
+      })
+      .addCase(editUser.pending.type, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editUser.rejected.type, (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      })
   },
 });
 

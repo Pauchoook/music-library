@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
         </ul>
         {isAuth ? (
           <div className="navbar__right">
-            <Link to="#" className="navbar__profile">
+            <Link to="/profile" className="navbar__profile">
               <img src={process.env.REACT_APP_API_URL + '/' + user?.avatar} className="navbar__profile-img" />
             </Link>
             <button onClick={() => dispatch(logout())} className="navbar__profile-btn">

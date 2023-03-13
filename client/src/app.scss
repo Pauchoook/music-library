@@ -1,3 +1,4 @@
+@import './styles/patterns';
 .app {
   overflow: hidden;
   &.left {
@@ -7,12 +8,31 @@
   }
   &__wrapper {
     display: flex;
-    width: calc(100% + 200px);
-    // min-height: 100vh;
-    transform: translateX(-200px);
+    width: calc(100% + 280px);
+    transform: translateX(-280px);
     transition: transform .2s ease;
-    &.left-open {
+    &.left {
       transform: translateX(0);
+    }
+  }
+  &__btn-menu {
+    @extend %btn;
+    position: fixed;
+    top: 20px;
+    left: 300px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background-color: #4f4f4f;
+    z-index: 10;
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: scale(1.15);
+    }
+    svg {
+      display: block;
+      width: 11px;
+      height: 19px;
+      fill: white;
     }
   }
 }

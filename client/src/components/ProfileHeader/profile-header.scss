@@ -1,0 +1,86 @@
+@import '../../styles/patterns';
+.profile-header {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid var(--emperor);
+  padding-bottom: 40px;
+  margin-bottom: 45px;
+  &__avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin-right: 30px;
+  }
+  &__info {
+  }
+  &__subtitle {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    margin: 0px 0px 20px 0px;
+  }
+  &__username {
+    font-size: 80px;
+    line-height: 94px;
+    margin: 0px 0px 5px 0px;
+  }
+  &__count-subscribers {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+  }
+  &__settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  &__settings-dropdown {
+    &:hover {
+      .dropdown__item {
+        visibility: visible;
+        z-index: 10;
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  }
+  &__settings-btn {
+    @extend %btn;
+    display: flex;
+    column-gap: 4px;
+    padding: 5px 0px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &__settings-circle {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: var(--white);
+    border-radius: 50%;
+  }
+  &__settings-list {
+    overflow: hidden;
+    list-style: none;
+    padding-left: 0;
+    background-color: var(--emperor);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    right: 0;
+  }
+  &__settings-item {
+    cursor: pointer;
+    white-space: nowrap;
+    padding: 10px;
+    font-size: 13px;
+    line-height: 15px;
+    transition: background-color .2s ease;
+    &:hover {
+      background-color: var(--emperor-dark);
+    }
+  }
+}

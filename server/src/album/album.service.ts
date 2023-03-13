@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { FileService, FileType } from 'src/files/file.service';
@@ -19,8 +19,8 @@ export class AlbumService {
     try {
       const user = await this.userModel.findById(dto.owner);
       const picturePath = picture
-      ? this.fileService.createFile(FileType.IMAGE, picture)
-      : 'image/default.jpg';
+        ? this.fileService.createFile(FileType.IMAGE, picture)
+        : 'image/default.jpg';
       const album = await this.albumModel.create({
         ...dto,
         listens: 0,
@@ -33,18 +33,27 @@ export class AlbumService {
 
       return album;
     } catch (e) {
-      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async getAll(owner: ObjectId): Promise<Album[]> {
+  async getAll(owner: ObjectId, limit: number, dateSort: string): Promise<Album[]> {
     try {
       let albums;
+      const sort = dateSort === 'desc' ? -1 : 1;
 
       if (owner) {
-        albums = await this.albumModel.find({ owner }).populate('owner');
+        albums = await this.albumModel
+          .find({ owner })
+          .limit(limit)
+          .populate({ path: 'owner', select: 'username' })
+          .sort({" date_field ": -1 });
       } else {
-        albums = await this.albumModel.find().populate('owner');
+        albums = await this.albumModel
+          .find()
+          .sort({" day ": -1 })
+          .limit(limit)
+          .populate('owner');
       }
 
       return albums;
