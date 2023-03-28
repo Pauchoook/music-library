@@ -37,7 +37,11 @@ export class AlbumService {
     }
   }
 
-  async getAll(owner: ObjectId, limit: number, dateSort: string): Promise<Album[]> {
+  async getAll(
+    owner: ObjectId,
+    limit: number,
+    dateSort: string,
+  ): Promise<Album[]> {
     try {
       let albums;
       const sort = dateSort === 'desc' ? -1 : 1;
@@ -46,14 +50,16 @@ export class AlbumService {
         albums = await this.albumModel
           .find({ owner })
           .limit(limit)
+          .populate('tracks')
           .populate({ path: 'owner', select: 'username' })
-          .sort({" date_field ": -1 });
+          .sort({ ' date_field ': -1 });
       } else {
         albums = await this.albumModel
           .find()
-          .sort({" day ": -1 })
           .limit(limit)
-          .populate('owner');
+          .populate('tracks')
+          .populate({ path: 'owner', select: ['username', 'avatar'] })
+          .sort({ ' day ': -1 });
       }
 
       return albums;
@@ -67,7 +73,7 @@ export class AlbumService {
       const album = await this.albumModel
         .findById(id)
         .populate('tracks')
-        .populate({ path: 'owner', select: 'username' });
+        .populate('owner');
       return album;
     } catch (e) {
       console.log(e);
@@ -84,7 +90,7 @@ export class AlbumService {
     }
   }
 
-  async rename(dto: RenameAlbumDto) {
+  async rename(dto: RenameAlbumDto): Promise<void> {
     try {
       const album = await this.albumModel.findById(dto.id);
       album.name = dto.name;
@@ -94,7 +100,7 @@ export class AlbumService {
     }
   }
 
-  async listen(id: ObjectId) {
+  async listen(id: ObjectId): Promise<void> {
     try {
       const album = await this.albumModel.findById(id);
       album.listens += 1;
@@ -104,8 +110,32 @@ export class AlbumService {
     }
   }
 
-  async addTrack(trackId: ObjectId) {
+  async addTrack(id: ObjectId, trackId: ObjectId): Promise<string> {
     try {
+      const album = await this.albumModel.findById(id);
+
+      const findTrack = album.tracks.find((itemId) => itemId === trackId);
+
+      if (!findTrack) {
+        album.tracks.push(trackId);
+        album.save();
+      }
+
+      return "track added";
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async removeTrack(id: ObjectId, trackId: ObjectId): Promise<string> {
+    try {
+      const album = await this.albumModel.findById(id);
+      console.log("Какой вид сейчас:", album.tracks[0]);
+      console.log("К какому виду нужно привести:", trackId);
+      album.tracks = album.tracks.filter((item) => item !== trackId);
+      album.save();
+
+      return "track removed";
     } catch (e) {
       console.log(e);
     }

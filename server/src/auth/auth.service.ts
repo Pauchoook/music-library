@@ -6,7 +6,6 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { FileService, FileType } from 'src/files/file.service';
-import { User } from 'src/user/schemas/user.schema';
 
 export interface ITokenUser {
   _id?: Object,

@@ -25,4 +25,4 @@ const AppWrapper: React.FC<AppWrapperProps> = ({isLeft, handlerLeft}) => {
   )
 }
 
-export default AppWrapper
+export default AppWrapper;

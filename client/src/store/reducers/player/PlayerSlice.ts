@@ -1,24 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { ITrack } from '../../../types/track';
-
-interface PlayerState {
-  active: null | ITrack;
-  currentTime: number;
-  duration: number;
-  volume: number;
-  pause: boolean;
-}
+import { createSlice } from "@reduxjs/toolkit";
+import { PlayerState } from "../../../types/player";
 
 const initialState: PlayerState = {
-  active: null,
+  currentAlbum: {
+    _id: null,
+    tracks: []
+  },
+  active: {
+    index: -1,
+    track: null,
+  },
   currentTime: 0,
   duration: 0,
   volume: 50,
-  pause: true
+  pause: true,
 };
 
 export const playerSlice = createSlice({
-  name: 'player',
+  name: "player",
   initialState,
   reducers: {
     pauseTrack(state) {
@@ -37,11 +36,18 @@ export const playerSlice = createSlice({
       state.duration = action.payload;
     },
     setActive(state, action) {
-      state.active = action.payload;
+      state.active.track = action.payload;
       state.duration = 0;
       state.currentTime = 0;
-    }
-  }
+
+      const indexActive = state.currentAlbum.tracks.findIndex((item) => item._id === state.active.track!._id);
+      state.active.index = indexActive;
+    },
+    playAlbum(state, action) {
+      state.currentAlbum = action.payload;
+      state.pause = false;
+    },
+  },
 });
 
 export default playerSlice.reducer;

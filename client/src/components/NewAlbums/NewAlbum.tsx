@@ -7,7 +7,6 @@ interface NewAlbumProps {
 }
 
 const NewAlbum: React.FC<NewAlbumProps> = ({ album }) => {
-  console.log(album)
   return (
     <div className="new-albums__item">
       <div className="new-albums__header">

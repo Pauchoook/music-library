@@ -1,31 +1,50 @@
-
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import { IAlbum, ICreateAlbum } from '../../types/album';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IAlbum } from "../../types/album";
 
 export const AlbumApi = createApi({
-  reducerPath: 'albumApi',
-  baseQuery: fetchBaseQuery({baseUrl: process.env.REACT_APP_API_URL}),
-  tagTypes: ['Albums'],
+  reducerPath: "albumApi",
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.REACT_APP_API_URL}/album` }),
+  tagTypes: ["MyAlbums"],
   endpoints: (build) => ({
-    getAlbums: build.query<IAlbum[], {limit: number, dateSort: string}>({
-      query: ({limit, dateSort}) => ({
-        url: `/album?limit=${limit}&dateSort=${dateSort}`
+    getAlbums: build.query<IAlbum[], { limit: number; dateSort: string }>({
+      query: ({ limit, dateSort }) => ({
+        url: `?limit=${limit}&dateSort=${dateSort}`,
       }),
-      providesTags: res => ['Albums']
     }),
-    getAlbumsOwner: build.query<IAlbum[], {owner_id: string, limit: number}>({
-      query: ({owner_id, limit}) => ({
-        url: `/album?owner_id=${owner_id}&limit=${limit}`,
+    getAlbumsOwner: build.query<IAlbum[], { owner_id: string; limit?: number }>({
+      query: ({ owner_id, limit }) => ({
+        url: `?owner_id=${owner_id}&limit=${limit || ""}`,
       }),
-      providesTags: res => ['Albums']
+      providesTags: (res) => ["MyAlbums"],
+    }),
+    getAlbumOne: build.query<IAlbum, { id: string }>({
+      query: ({ id }) => ({
+        url: `/${id}`,
+      }),
     }),
     createAlbum: build.mutation<IAlbum[], FormData>({
       query: (album) => ({
-        url: '/album',
-        method: 'POST',
-        body: album
+        url: "",
+        method: "POST",
+        body: album,
       }),
-      invalidatesTags: ['Albums']
-    })
-  })
+      invalidatesTags: ["MyAlbums"],
+    }),
+    addTrack: build.mutation<IAlbum, { id: string; trackId: string }>({
+      query: (body) => ({
+        url: "/addTrack",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["MyAlbums"],
+    }),
+    removeTrack: build.mutation<IAlbum, { id: string; trackId: string }>({
+      query: (body) => ({
+        url: "/removeTrack",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["MyAlbums"],
+    }),
+  }),
 });

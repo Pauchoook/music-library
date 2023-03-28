@@ -58,4 +58,4 @@ const NavList: React.FC = () => {
   );
 };
 
-export default React.memo(NavList);
+export default NavList;

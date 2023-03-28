@@ -28,7 +28,7 @@ const DropdownSettings: React.FC = () => {
           <span className="profile-header__settings-circle"></span>
           <span className="profile-header__settings-circle"></span>
         </div>
-        <ul onClick={(e) => e.stopPropagation()} className="dropdown__item profile-header__settings-list">
+        <ul className="dropdown__item profile-header__settings-list">
           <li onClick={() => setIsChangeAvatar(true)} className="profile-header__settings-item">Изменить аватар</li>
           <li onClick={() => setIsEditProfile(true)} className="profile-header__settings-item">Редактировать профиль</li>
           <li onClick={() => setIsAddTrack(true)} className="profile-header__settings-item">Добавить трек</li>

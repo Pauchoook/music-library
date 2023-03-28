@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation } from 'swiper';
-import './album-slider.scss';
-import { IAlbum } from '../../types/album';
+import React, { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper";
+import "./album-slider.scss";
+import { IAlbum } from "../../types/album";
+import { Link } from "react-router-dom";
+import { ALBUM } from "../../utils/path";
 
 interface AlbumSliderProps {
   title: string;
@@ -37,7 +39,6 @@ const AlbumSlider: React.FC<AlbumSliderProps> = ({ title, albums, isLoading }) =
         className="album-slider__slider"
         spaceBetween={20}
         slidesPerView="auto"
-        grabCursor={true}
         navigation={{
           prevEl: prevRef.current,
           nextEl: nextRef.current,
@@ -50,13 +51,15 @@ const AlbumSlider: React.FC<AlbumSliderProps> = ({ title, albums, isLoading }) =
         {albums &&
           albums.map((album) => (
             <SwiperSlide key={album._id} className="album-slider__slide">
-              <img
-                src={process.env.REACT_APP_API_URL + '/' + album.picture}
-                alt="Изображение альбома"
-                className="album-slider__album-img"
-              />
-              <h5 className="album-slider__album-title">{album.name}</h5>
-              <span className="album-slider__album-owner">{album.executor}</span>
+              <Link to={`${ALBUM}/${album._id}`}>
+                <img
+                  src={process.env.REACT_APP_API_URL + "/" + album.picture}
+                  alt="Изображение альбома"
+                  className="album-slider__album-img"
+                />
+                <h5 className="album-slider__album-title">{album.name}</h5>
+                <span className="album-slider__album-owner">{album.executor}</span>
+              </Link>
             </SwiperSlide>
           ))}
       </Swiper>

@@ -15,7 +15,7 @@ const Player: React.FC = () => {
   const [repeat, setRepeat] = useState<boolean>(false);
 
   useEffect(() => {
-    audio.src = process.env.REACT_APP_API_URL + '/' + active?.audio;
+    audio.src = process.env.REACT_APP_API_URL + '/' + active.track?.audio;
     audio.volume = volume / 100;
     audio.play()
     dispatch(playTrack());
@@ -38,12 +38,18 @@ const Player: React.FC = () => {
     };
   }, [repeat]);
 
+  useEffect(() => {
+    if (pause) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+  }, [pause]);
+
   const play = () => {
     if (pause) {
       dispatch(playTrack());
-      audio.play();
     } else {
-      audio.pause();
       dispatch(pauseTrack());
     }
   };
@@ -69,10 +75,10 @@ const Player: React.FC = () => {
   return (
     <div className="player">
       <div className="player__info">
-        <img src={picture} className="player__img" />
+        <img src={process.env.REACT_APP_API_URL + "/" + active.track?.picture} className="player__img" />
         <div className="player__info-right">
-          <h6 className="player__track-title">hate if ur mad</h6>
-          <span className="player__track-executor">Yameli Online</span>
+          <h6 className="player__track-title">{active.track?.name}</h6>
+          <span className="player__track-executor">{active.track?.executor}</span>
         </div>
       </div>
       <button className="player__like">

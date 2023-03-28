@@ -1,11 +1,16 @@
+import Album from "../pages/Album";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
-import { HOME, PROFILE } from "./path";
+import { ALBUM, HOME, PROFILE } from "./path";
 
 export const publicRoutes = [
   {
     path: HOME,
     Component: Home
+  },
+  {
+    path: `${ALBUM}/:id`,
+    Component: Album
   }
 ]
 

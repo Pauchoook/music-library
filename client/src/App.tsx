@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import { BrowserRouter } from 'react-router-dom';
-import { useAppDispatch } from './hooks/redux';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { check } from './store/reducers/user/ActionCreators';
 import Player from './components/Player';
 import './app.scss';
 import AppWrapper from './components/AppWrapper';
 
 function App() {
+  const {active} = useAppSelector(state => state.player);
   const [isLeft, setIsLeft] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -27,9 +28,9 @@ function App() {
         <Sidebar close={() => setIsLeft(false)} />
         <AppWrapper isLeft={isLeft} handlerLeft={handlerLeft} />
       </BrowserRouter>
-      <Player />
+      {active.track && <Player />}
     </div>
   );
 }
 
-export default App;
+export default React.memo(App);

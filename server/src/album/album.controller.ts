@@ -32,7 +32,11 @@ export class AlbumController {
   }
 
   @Get()
-  getAll(@Query('owner_id') owner_id: ObjectId, @Query('limit') limit: number, @Query('dateSort') dateSort: string) {
+  getAll(
+    @Query('owner_id') owner_id: ObjectId,
+    @Query('limit') limit: number,
+    @Query('dateSort') dateSort: string,
+  ) {
     return this.albumService.getAll(owner_id, limit, dateSort);
   }
 
@@ -41,18 +45,28 @@ export class AlbumController {
     return this.albumService.getOne(id);
   }
 
-  @Delete(':id') 
+  @Delete(':id')
   delete(@Param('id') id: ObjectId) {
     return this.albumService.delete(id);
   }
 
-  @Put() 
+  @Put()
   rename(@Body() dto: RenameAlbumDto) {
     return this.albumService.rename(dto);
   }
 
-  @Put('/listen/:id') 
+  @Put('/listen/:id')
   listen(@Param('id') id: ObjectId) {
     return this.albumService.listen(id);
+  }
+
+  @Post('/addTrack')
+  addTrack(@Body('id') id: ObjectId, @Body('trackId') trackId: ObjectId) {
+    return this.albumService.addTrack(id, trackId);
+  }
+
+  @Post('/removeTrack')
+  removerack(@Body('id') id: ObjectId, @Body('trackId') trackId: ObjectId) {
+    return this.albumService.removeTrack(id, trackId);
   }
 }

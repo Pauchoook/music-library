@@ -1,7 +1,7 @@
 import { IUser } from "./user";
 
 export interface ITrack {
-  _id?: string;
+  _id: string;
   name: string;
   listens: number;
   picture: string;

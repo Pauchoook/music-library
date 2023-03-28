@@ -1,0 +1,78 @@
+@import "../../styles/patterns";
+.album-body {
+  padding-top: 20px;
+  border-top: 2px solid var(--mine-shaft-dark);
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+  }
+  &__play {
+    @extend %btn;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      svg {
+        transform: scale(1.12);
+      }
+    }
+  }
+  &__play-icon {
+    width: 18px;
+    height: 23px;
+    fill: white;
+    transition: transform 0.2s ease;
+  }
+  &__search {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-radius: 20px;
+    transition: background-color .2s ease;
+    &.active {
+      background-color: var(--gray);
+      .album-body__search-input {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible
+      }
+    }
+  }
+  &__search-input {
+    @extend %input;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 21px;
+    width: 375px;
+    padding-right: 10px;
+    transform: translateY(25px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s ease .2s, opacity 0.4s ease .2s, visibility 0.4s ease .2s;
+    &::placeholder {
+      color: white;
+      opacity: 0.8;
+    }
+  }
+  &__search-btn {
+    @extend %btn;
+    padding: 10px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    svg {
+      display: block;
+      width: 30px;
+      height: 30px;
+      fill: white;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

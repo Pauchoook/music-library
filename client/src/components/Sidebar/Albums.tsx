@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { AlbumApi } from '../../store/services/AlbumService';
+import { ALBUM } from '../../utils/path';
 
 interface AlbumsProps {
   openCreateAlbum: () => void;
@@ -26,7 +27,7 @@ const Albums: React.FC<AlbumsProps> = ({ openCreateAlbum }) => {
         {myAlbums &&
           myAlbums.map((album) => (
             <li key={album._id} className="sidebar__albums-item">
-              <Link to={`/${album._id}`} className="sidebar__albums-el">
+              <Link to={`${ALBUM}/${album._id}`} className="sidebar__albums-el">
                 <img src={process.env.REACT_APP_API_URL + '/' + album.picture} alt="Изображение" className="sidebar__albums-img" />
                 <h5 className="sidebar__albums-list-title">{album.name}</h5>
               </Link>
@@ -37,4 +38,4 @@ const Albums: React.FC<AlbumsProps> = ({ openCreateAlbum }) => {
   );
 };
 
-export default React.memo(Albums);
+export default Albums;

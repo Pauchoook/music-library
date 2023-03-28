@@ -1,0 +1,48 @@
+.album-header {
+  display: flex;
+  margin-bottom: 40px;
+  &__img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-right: 30px;
+    border-radius: 10px;
+  }
+  &__info {
+  }
+  &__subtitle {
+    display: block;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 20px;
+  }
+  &__title {
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 112px;
+    margin: 0px 0px 10px 0px;
+  }
+  &__owner {
+    display: inline-flex;
+    align-items: center;
+    &:hover {
+      .album-header__owner-username {
+        opacity: 0.6;
+      }
+    }
+  }
+  &__owner-avatar {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  &__owner-username {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    transition: opacity 0.2s ease;
+  }
+}
