@@ -1,14 +1,15 @@
 import React from "react";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { playerSlice } from "../../store/reducers/player/PlayerSlice";
 import { ITrack } from "../../types/track";
+import BtnLike from "../BtnLike";
 import DropdownTrack from "./DropdownTrack";
 import "./track.scss";
 
 interface TrackProps {
   track: ITrack;
   number: number;
-  active: boolean;
+  active: boolean; // активен ли текущий трек
   handlerPlay?: () => void;
 }
 
@@ -17,10 +18,12 @@ const Track: React.FC<TrackProps> = ({ track, number, active, handlerPlay }) => 
   const dispatch = useAppDispatch();
 
   const handlerClick = () => {
-    dispatch(setActive(track));
-    if (handlerPlay) {
-      handlerPlay();
-    }
+    if (!active) {
+      if (handlerPlay) {
+        handlerPlay();
+      }
+      dispatch(setActive(track));
+    };
   };
 
   return (
@@ -34,11 +37,7 @@ const Track: React.FC<TrackProps> = ({ track, number, active, handlerPlay }) => 
         </div>
       </div>
       <h5 className="track__name-middle">{track.name}</h5>
-      <button className="track__btn-like">
-        <svg viewBox="0 0 21 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10.5 19.5L8.9775 18.1332C3.57 13.2978 0 10.0984 0 6.19482C0 2.99537 2.541 0.5 5.775 0.5C7.602 0.5 9.3555 1.33869 10.5 2.65368C11.6445 1.33869 13.398 0.5 15.225 0.5C18.459 0.5 21 2.99537 21 6.19482C21 10.0984 17.43 13.2978 12.0225 18.1332L10.5 19.5Z" />
-        </svg>
-      </button>
+      <BtnLike onClick={() => console.log("like")} />
       <span className="track__time">01:50</span>
       <DropdownTrack track={track} />
     </li>

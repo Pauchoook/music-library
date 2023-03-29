@@ -7,10 +7,11 @@ import "./album-header.scss";
 interface AlbumHeaderProps {
   img: string;
   title: string;
+  listens: number;
   owner: IUser;
 }
 
-const AlbumHeader: React.FC<AlbumHeaderProps> = ({ img, title, owner }) => {
+const AlbumHeader: React.FC<AlbumHeaderProps> = ({ img, title, owner, listens }) => {
   const { user } = useAppSelector((state) => state.user);
   const isMyAlbum = user!._id === owner._id;
 
@@ -30,6 +31,9 @@ const AlbumHeader: React.FC<AlbumHeaderProps> = ({ img, title, owner }) => {
             <span className="album-header__owner-username">{owner.username}</span>
           </Link>
         )}
+        <span className="album-header__listens">
+          Listens: {listens}
+        </span>
       </div>
     </div>
   );

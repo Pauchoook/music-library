@@ -1,21 +1,32 @@
 import React from "react";
 import { useAppSelector } from "../../hooks/redux";
 import { IAlbum } from "../../types/album";
+import { ITrack } from "../../types/track";
 import Track from "../Track";
 
 interface ListTrackProps {
-  album: IAlbum | undefined;
+  tracks: ITrack[];
   handlerPlay: () => void;
 }
 
-const ListTracks: React.FC<ListTrackProps> = ({ album, handlerPlay }) => {
-  const {active} = useAppSelector(state => state.player);
+const ListTracks: React.FC<ListTrackProps> = ({ tracks, handlerPlay }) => {
+  const { active } = useAppSelector((state) => state.player);
 
   return (
     <>
-      {album?.tracks.map((track, index) => (
-        <Track key={track._id} handlerPlay={handlerPlay} track={track} number={index + 1} active={active.track?._id === track?._id}/>
-      ))}
+      {tracks.length ? (
+        tracks.map((track, index) => (
+          <Track
+            key={track._id}
+            handlerPlay={handlerPlay}
+            track={track}
+            number={index + 1}
+            active={active.track?._id === track?._id}
+          />
+        ))
+      ) : (
+        <h4 className="album-body__empty">The album is empty</h4>
+      )}
     </>
   );
 };

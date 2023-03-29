@@ -4,7 +4,7 @@ import { PlayerState } from "../../../types/player";
 const initialState: PlayerState = {
   currentAlbum: {
     _id: null,
-    tracks: []
+    tracks: [],
   },
   active: {
     index: -1,

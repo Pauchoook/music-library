@@ -46,5 +46,11 @@ export const AlbumApi = createApi({
       }),
       invalidatesTags: ["MyAlbums"],
     }),
+    listenAlbum: build.mutation<undefined, string>({
+      query: (id) => ({
+        url: `/listen/${id}`,
+        method: "PUT",
+      }),
+    }),
   }),
 });

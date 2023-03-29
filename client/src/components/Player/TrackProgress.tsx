@@ -1,16 +1,16 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { playerSlice } from '../../store/reducers/player/PlayerSlice';
-import LineProgress from '../LinePorgress';
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { playerSlice } from "../../store/reducers/player/PlayerSlice";
+import LineProgress from "../LinePorgress";
 
 interface TrackProgressProps {
-  audio: any,
+  audio: any;
   // changeCurrentTime: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TrackProgress: React.FC<TrackProgressProps> = ({audio}) => {
+const TrackProgress: React.FC<TrackProgressProps> = ({ audio }) => {
   const { currentTime, duration } = useAppSelector((state) => state.player);
-  const {setCurrentTime} = playerSlice.actions;
+  const { setCurrentTime } = playerSlice.actions;
   const dispatch = useAppDispatch();
   const currentMinutes =
     Math.floor(currentTime / 60) < 10 ? `0${Math.floor(currentTime / 60)}` : Math.floor(currentTime / 60);

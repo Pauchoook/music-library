@@ -16,7 +16,7 @@ const Album: React.FC = () => {
         <h1>Loading</h1>
       ) : (
         <>
-          <AlbumHeader img={album!.picture} title={album!.name} owner={album!.owner} />
+          <AlbumHeader img={album!.picture} title={album!.name} owner={album!.owner} listens={album!.listens} />
           <AlbumBody album={album} />
         </>
       )}

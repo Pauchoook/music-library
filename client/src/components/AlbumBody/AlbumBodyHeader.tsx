@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
+import React, { useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { playerSlice } from "../../store/reducers/player/PlayerSlice";
 import { IAlbum } from "../../types/album";
@@ -7,20 +8,28 @@ import "./album-body.scss";
 interface AlbumBodyHeaderProps {
   album: IAlbum | undefined;
   handlerPlay: () => void;
+  handlerSerachTracks: (str: string) => void;
 }
 
-const AlbumBodyHeader: React.FC<AlbumBodyHeaderProps> = ({ album, handlerPlay }) => {
+const AlbumBodyHeader: React.FC<AlbumBodyHeaderProps> = ({ album, handlerPlay, handlerSerachTracks }) => {
   const [isActiveSearch, setIsActiveSearch] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isActiveAlbum, setIsActiveAlbum] = useState<boolean>(false);
   const { currentAlbum, pause } = useAppSelector((state) => state.player);
   const { pauseTrack } = playerSlice.actions;
-  // const isActiveAlbum = album?._id === currentAlbum._id && !pause;
+  const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
+  const timeout = useRef<TimeoutId>();
 
   React.useEffect(() => {
-    setIsActiveAlbum(album?._id === currentAlbum._id && !pause)
-  }, [currentAlbum, pause]);
+    if (timeout.current) clearTimeout(timeout.current);
+
+    timeout.current = setTimeout(() => handlerSerachTracks(searchValue), 500);
+  }, [searchValue]);
+
+  React.useEffect(() => {
+    setIsActiveAlbum(album?._id === currentAlbum._id && !pause);
+  }, [currentAlbum, pause, album]);
 
   const handlerPlayAlbum = () => {
     if (isActiveAlbum) {
@@ -33,13 +42,15 @@ const AlbumBodyHeader: React.FC<AlbumBodyHeaderProps> = ({ album, handlerPlay })
   const handlerClickSearch = () => {
     if (!isActiveSearch) {
       setIsActiveSearch(true);
-    } else {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     }
   };
 
   return (
     <div className="album-body__header">
-      <button onClick={handlerPlayAlbum} className="album-body__play">
+      <button onClick={handlerPlayAlbum} disabled={!album?.tracks.length} className="album-body__play">
         {isActiveAlbum ? (
           <svg className="album-body__play-icon" viewBox="0 0 17 20" xmlns="http://www.w3.org/2000/svg">
             <rect width="5" height="20" rx="2.5" />
@@ -54,6 +65,7 @@ const AlbumBodyHeader: React.FC<AlbumBodyHeaderProps> = ({ album, handlerPlay })
       <div className={isActiveSearch ? "album-body__search active" : "album-body__search"}>
         <input
           value={searchValue}
+          ref={inputRef}
           onChange={(e) => setSearchValue(e.target.value)}
           type="text"
           placeholder="Search track"
@@ -69,4 +81,4 @@ const AlbumBodyHeader: React.FC<AlbumBodyHeaderProps> = ({ album, handlerPlay })
   );
 };
 
-export default React.memo(AlbumBodyHeader);
+export default AlbumBodyHeader;
